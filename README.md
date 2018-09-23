@@ -44,7 +44,7 @@ main() async {
   StatusResponse status;
   await controller
       .requestStatus()
-      .then((response) => status = response ?? status);
+      .then((response) => status = response);
 
   print("powered on: ${status?.poweredOn}");
   print("red:   ${status?.red}");
