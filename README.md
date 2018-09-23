@@ -6,7 +6,7 @@ A dart library for controlling the Sunix® RGB / RGBWWCW WiFi LED strip controll
 ## Features
 - Power the controller off and on
 - Change the color of the led controller
-	- For RGB or RGBWWCW (warm white and cold white) controller
+	- For RGB or RGBWWCW (warm white and cold white) colors
 - Receive the current status of the controller, including the power state and color values
 - Send multiple requests in quick succession
 	- Can be used to create a smooth transition from one color to another
