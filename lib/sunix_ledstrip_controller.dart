@@ -3,6 +3,6 @@
 /// More dartdocs go here.
 library sunix_ledstrip_controller;
 
-export 'src/sunix_ledstrip_controller_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/led_controller.dart';
+export 'src/requests.dart';
+export 'src/response.dart';
