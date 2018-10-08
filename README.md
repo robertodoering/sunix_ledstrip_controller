@@ -16,7 +16,7 @@ A dart library for controlling the Sunix® RGB / RGBWWCW WiFi LED strip controll
 You can install the package by adding the following to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  sunix_ledstrip_controller: ^1.0.0
+  sunix_ledstrip_controller: ^1.0.1
 ```
 
 
