@@ -16,16 +16,16 @@ abstract class LedResponse {
   /// the expected length from the [_dataMap] or if the checksum is invalid.
   void parse(List<int> data) {
     if (_dataMap.length != data.length) {
-      throw ResponseParserException("Response length mismatch.\n"
-          "Expected length: ${_dataMap.length}.\n"
-          "Received length: ${data.length}");
+      throw ResponseParserException('Response length mismatch.\n'
+          'Expected length: ${_dataMap.length}.\n'
+          'Received length: ${data.length}');
     }
 
     if (!evaluateChecksum(data)) {
-      throw ResponseParserException("Invalid response checksum");
+      throw ResponseParserException('Invalid response checksum');
     }
 
-    for (int i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       _dataMap[_dataMap.keys.elementAt(i)] = data[i];
     }
   }
@@ -38,31 +38,31 @@ abstract class LedResponse {
 ///
 /// Used together with [StatusRequest].
 class StatusResponse extends LedResponse {
-  int get red => _dataMap["red"];
-  int get green => _dataMap["green"];
-  int get blue => _dataMap["blue"];
-  int get warmWhite => _dataMap["warmWhite"];
-  int get coldWhite => _dataMap["coldWhite"];
+  int get red => _dataMap['red'];
+  int get green => _dataMap['green'];
+  int get blue => _dataMap['blue'];
+  int get warmWhite => _dataMap['warmWhite'];
+  int get coldWhite => _dataMap['coldWhite'];
 
-  bool get poweredOn => _dataMap["powerStatus"] == powerStateOn;
-  bool get poweredOff => _dataMap["powerStatus"] == powerStateOff;
+  bool get poweredOn => _dataMap['powerStatus'] == powerStateOn;
+  bool get poweredOff => _dataMap['powerStatus'] == powerStateOff;
 
   StatusResponse(List<int> data) {
     _dataMap = {
-      "packetId": null,
-      "deviceName": null,
-      "powerStatus": null,
-      "mode": null,
-      "runStatus": null,
-      "speed": null,
-      "red": null,
-      "green": null,
-      "blue": null,
-      "warmWhite": null,
-      "_unknown1": null,
-      "coldWhite": null,
-      "_unknown2": null,
-      "checkSum": null,
+      'packetId': null,
+      'deviceName': null,
+      'powerStatus': null,
+      'mode': null,
+      'runStatus': null,
+      'speed': null,
+      'red': null,
+      'green': null,
+      'blue': null,
+      'warmWhite': null,
+      '_unknown1': null,
+      'coldWhite': null,
+      '_unknown2': null,
+      'checkSum': null,
     };
 
     parse(data);
@@ -75,5 +75,5 @@ class ResponseParserException implements Exception {
   ResponseParserException(this.message);
 
   @override
-  String toString() => "Exception: Unable to parse response\n$message";
+  String toString() => 'Exception: Unable to parse response\n$message';
 }

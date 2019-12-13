@@ -16,4 +16,5 @@ doc/api/
 *.ipr
 *.iws
 .idea/
+.vscode/
 .DS_Store

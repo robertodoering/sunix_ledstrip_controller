@@ -10,7 +10,7 @@ const defaultPort = 5577;
 // todo: discover controller
 
 class LedController {
-  Logger log = Logger("LedController");
+  Logger log = Logger('LedController');
 
   /// The host ip address of the led controller.
   String host;
@@ -33,15 +33,15 @@ class LedController {
   /// [timeout], a [TimeoutException] will be thrown.
   Future<List<int>> sendRequest(LedRequest request,
       [Duration timeout = const Duration(seconds: 10)]) async {
-    log.info("sending request: $request");
+    log.info('sending request: $request');
 
     try {
-      var s = await Socket.connect(host, port);
+      final s = await Socket.connect(host, port);
       s.add(request.data);
 
       // add listener when waiting for response
       if (request.waitForResponse) {
-        log.info("waiting for response");
+        log.info('waiting for response');
 
         List<int> responseData;
 
@@ -62,7 +62,7 @@ class LedController {
         return null;
       }
     } on SocketException {
-      log.warning("exception while sending request");
+      log.warning('exception while sending request');
       rethrow;
     }
   }
@@ -78,24 +78,24 @@ class LedController {
     List<LedRequest> requests,
     Duration duration,
   ) async {
-    Duration interval = Duration(
+    final interval = Duration(
       microseconds: duration.inMicroseconds ~/ requests.length,
     );
 
-    log.info("sending ${requests.length} requests in an interval of "
-        "${interval.inMilliseconds}ms");
+    log.info('sending ${requests.length} requests in an interval '
+        'of ${interval.inMilliseconds}ms');
 
     try {
-      var s = await Socket.connect(host, port);
+      final s = await Socket.connect(host, port);
 
-      for (LedRequest request in requests) {
+      for (final request in requests) {
         s.add(request.data);
         sleep(interval);
       }
 
       s.destroy();
     } on SocketException {
-      log.warning("exception while sending requests");
+      log.warning('exception while sending requests');
       rethrow;
     }
   }
@@ -109,7 +109,7 @@ class LedController {
       await sendRequest(UpdateColorRequest.rgb(red: r, green: g, blue: b));
       return true;
     } catch (e) {
-      log.warning("error while changing color rgb", e);
+      log.warning('error while changing color rgb', e);
       return false;
     }
   }
@@ -129,7 +129,7 @@ class LedController {
       ));
       return true;
     } catch (e) {
-      log.warning("error while changing color rgbww", e);
+      log.warning('error while changing color rgbww', e);
       return false;
     }
   }
@@ -143,7 +143,7 @@ class LedController {
       await sendRequest(UpdateColorRequest.ww(warmWhite: ww, coldWhite: cw));
       return true;
     } catch (e) {
-      log.warning("error while changing color ww", e);
+      log.warning('error while changing color ww', e);
       return false;
     }
   }
@@ -157,7 +157,7 @@ class LedController {
       await sendRequest(SetPowerRequest.on());
       return true;
     } catch (e) {
-      log.warning("error while powering on", e);
+      log.warning('error while powering on', e);
       return false;
     }
   }
@@ -171,7 +171,7 @@ class LedController {
       await sendRequest(SetPowerRequest.off());
       return true;
     } catch (e) {
-      log.warning("error while powering off", e);
+      log.warning('error while powering off', e);
       return false;
     }
   }
@@ -182,10 +182,10 @@ class LedController {
   /// problem sending the request or if the response is not received in time.
   Future<StatusResponse> requestStatus() async {
     try {
-      List<int> data = await sendRequest(StatusRequest());
+      final data = await sendRequest(StatusRequest());
       return StatusResponse(data);
     } catch (e) {
-      log.warning("error while requesting or receiving status", e);
+      log.warning('error while requesting or receiving status', e);
       return null;
     }
   }

@@ -56,14 +56,14 @@ class UpdateColorRequest extends LedRequest {
     this.red,
     this.green,
     this.blue,
-  }) : this.rgbwwSelection = selectionRgb {
+  }) : rgbwwSelection = selectionRgb {
     _addData();
   }
 
   UpdateColorRequest.ww({
     this.warmWhite,
     this.coldWhite,
-  }) : this.rgbwwSelection = selectionWw {
+  }) : rgbwwSelection = selectionWw {
     _addData();
   }
 
@@ -73,7 +73,7 @@ class UpdateColorRequest extends LedRequest {
     this.blue,
     this.warmWhite,
     this.coldWhite,
-  }) : this.rgbwwSelection = selectionRgbww {
+  }) : rgbwwSelection = selectionRgbww {
     _addData();
   }
 
@@ -94,7 +94,7 @@ class UpdateColorRequest extends LedRequest {
 
   /// Throws an [ArgumentError] if any color is invalid.
   void _validateColors() {
-    var colors = [
+    final colors = <int>[
       red,
       green,
       blue,
@@ -102,16 +102,16 @@ class UpdateColorRequest extends LedRequest {
       coldWhite,
     ];
 
-    var invalidColors = colors
+    final invalidColors = colors
         .where((value) => value != null ? value < 0 || value > 255 : false);
 
-    if (invalidColors.length > 0) {
-      throw ArgumentError("Invalid color range for $invalidColors.");
+    if (invalidColors.isNotEmpty) {
+      throw ArgumentError('Invalid color range for $invalidColors.');
     }
   }
 
   @override
-  String toString() => "Update color request: ${super.toString()}";
+  String toString() => 'Update color request: ${super.toString()}';
 }
 
 /// Request for changing the power state of the controller.
@@ -140,7 +140,7 @@ class SetPowerRequest extends LedRequest {
   }
 
   @override
-  String toString() => "Set power request: ${super.toString()}";
+  String toString() => 'Set power request: ${super.toString()}';
 }
 
 /// Request for the current status of the controller.
@@ -161,5 +161,5 @@ class StatusRequest extends LedRequest {
   }
 
   @override
-  String toString() => "Status request: ${super.toString()}";
+  String toString() => 'Status request: ${super.toString()}';
 }
