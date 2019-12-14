@@ -36,8 +36,8 @@ class LedController {
     log.info('sending request: $request');
 
     try {
-      final s = await Socket.connect(host, port);
-      s.add(request.data);
+      final socket = await Socket.connect(host, port);
+      socket.add(request.data);
 
       // add listener when waiting for response
       if (request.waitForResponse) {
@@ -45,20 +45,20 @@ class LedController {
 
         List<int> responseData;
 
-        await for (var data in s.timeout(timeout)) {
+        await for (var data in socket.timeout(timeout)) {
           if (data is List<int>) {
-            s.destroy();
+            socket.destroy();
             responseData = data;
           } else if (data is TimeoutException) {
-            s.destroy();
+            socket.destroy();
             throw data;
           }
-          s.destroy();
+          socket.destroy();
         }
 
         return responseData;
       } else {
-        s.destroy();
+        socket.destroy();
         return null;
       }
     } on SocketException {
@@ -86,14 +86,14 @@ class LedController {
         'of ${interval.inMilliseconds}ms');
 
     try {
-      final s = await Socket.connect(host, port);
+      final socket = await Socket.connect(host, port);
 
       for (final request in requests) {
-        s.add(request.data);
+        socket.add(request.data);
         sleep(interval);
       }
 
-      s.destroy();
+      socket.destroy();
     } on SocketException {
       log.warning('exception while sending requests');
       rethrow;
@@ -102,8 +102,8 @@ class LedController {
 
   /// Changes the rgb color for the led controller.
   ///
-  /// Returns true if the request was successfully sent to the controller, else
-  /// otherwise.
+  /// Returns `true` if the request was successfully sent to the controller,
+  /// `false` otherwise.
   Future<bool> updateColorRgb(int r, int g, int b) async {
     try {
       await sendRequest(UpdateColorRequest.rgb(red: r, green: g, blue: b));
@@ -116,8 +116,8 @@ class LedController {
 
   /// Changes the rgbww color for the led controller.
   ///
-  /// Returns true if the request was successfully sent to the controller, else
-  /// otherwise.
+  /// Returns `true` if the request was successfully sent to the controller,
+  /// `false` otherwise.
   Future<bool> updateColorRgbww(int r, int g, int b, int ww, int cw) async {
     try {
       await sendRequest(UpdateColorRequest.rgbww(
@@ -136,8 +136,8 @@ class LedController {
 
   /// Changes the ww color for the led controller.
   ///
-  /// Returns true if the request was successfully sent to the controller, else
-  /// otherwise.
+  /// Returns `true` if the request was successfully sent to the controller,
+  /// `false` otherwise.
   Future<bool> updateColorWw(int ww, int cw) async {
     try {
       await sendRequest(UpdateColorRequest.ww(warmWhite: ww, coldWhite: cw));
@@ -150,8 +150,8 @@ class LedController {
 
   /// Powers the led controller on.
   ///
-  /// Returns true if the request was successfully sent to the controller, else
-  /// otherwise.
+  /// Returns `true` if the request was successfully sent to the controller,
+  /// `false` otherwise.
   Future<bool> powerOn() async {
     try {
       await sendRequest(SetPowerRequest.on());
@@ -164,8 +164,8 @@ class LedController {
 
   /// Powers the led controller off.
   ///
-  /// Returns true if the request was successfully sent to the controller, else
-  /// otherwise.
+  /// Returns `true` if the request was successfully sent to the controller,
+  /// `false` otherwise.
   Future<bool> powerOff() async {
     try {
       await sendRequest(SetPowerRequest.off());
@@ -178,7 +178,7 @@ class LedController {
 
   /// Requests the status of the led controller.
   ///
-  /// Returns a [StatusResponse] after receiving it or null if there was a
+  /// Returns a [StatusResponse] after receiving it or `null` if there was a
   /// problem sending the request or if the response is not received in time.
   Future<StatusResponse> requestStatus() async {
     try {
