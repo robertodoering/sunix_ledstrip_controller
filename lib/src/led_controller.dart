@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:logging/logging.dart';
 import 'package:sunix_ledstrip_controller/src/requests.dart';
 import 'package:sunix_ledstrip_controller/src/response.dart';
 
@@ -10,8 +9,6 @@ const defaultPort = 5577;
 // todo: discover controller
 
 class LedController {
-  Logger log = Logger('LedController');
-
   /// The host ip address of the led controller.
   String host;
 
@@ -31,39 +28,32 @@ class LedController {
   /// Otherwise it will return the response as a List<int>.
   /// If no data has been received in the duration of
   /// [timeout], a [TimeoutException] will be thrown.
-  Future<List<int>> sendRequest(LedRequest request,
-      [Duration timeout = const Duration(seconds: 10)]) async {
-    log.info('sending request: $request');
+  Future<List<int>> sendRequest(
+    LedRequest request, [
+    Duration timeout = const Duration(seconds: 10),
+  ]) async {
+    final socket = await Socket.connect(host, port);
+    socket.add(request.data);
 
-    try {
-      final socket = await Socket.connect(host, port);
-      socket.add(request.data);
+    // add listener when waiting for response
+    if (request.waitForResponse) {
+      List<int> responseData;
 
-      // add listener when waiting for response
-      if (request.waitForResponse) {
-        log.info('waiting for response');
-
-        List<int> responseData;
-
-        await for (var data in socket.timeout(timeout)) {
-          if (data is List<int>) {
-            socket.destroy();
-            responseData = data;
-          } else if (data is TimeoutException) {
-            socket.destroy();
-            throw data;
-          }
+      await for (var data in socket.timeout(timeout)) {
+        if (data is List<int>) {
           socket.destroy();
+          responseData = data;
+        } else if (data is TimeoutException) {
+          socket.destroy();
+          throw data;
         }
-
-        return responseData;
-      } else {
         socket.destroy();
-        return null;
       }
-    } on SocketException {
-      log.warning('exception while sending request');
-      rethrow;
+
+      return responseData;
+    } else {
+      socket.destroy();
+      return null;
     }
   }
 
@@ -82,22 +72,14 @@ class LedController {
       microseconds: duration.inMicroseconds ~/ requests.length,
     );
 
-    log.info('sending ${requests.length} requests in an interval '
-        'of ${interval.inMilliseconds}ms');
+    final socket = await Socket.connect(host, port);
 
-    try {
-      final socket = await Socket.connect(host, port);
-
-      for (final request in requests) {
-        socket.add(request.data);
-        sleep(interval);
-      }
-
-      socket.destroy();
-    } on SocketException {
-      log.warning('exception while sending requests');
-      rethrow;
+    for (final request in requests) {
+      socket.add(request.data);
+      sleep(interval);
     }
+
+    socket.destroy();
   }
 
   /// Changes the rgb color for the led controller.
@@ -109,7 +91,6 @@ class LedController {
       await sendRequest(UpdateColorRequest.rgb(red: r, green: g, blue: b));
       return true;
     } catch (e) {
-      log.warning('error while changing color rgb', e);
       return false;
     }
   }
@@ -129,7 +110,6 @@ class LedController {
       ));
       return true;
     } catch (e) {
-      log.warning('error while changing color rgbww', e);
       return false;
     }
   }
@@ -143,7 +123,6 @@ class LedController {
       await sendRequest(UpdateColorRequest.ww(warmWhite: ww, coldWhite: cw));
       return true;
     } catch (e) {
-      log.warning('error while changing color ww', e);
       return false;
     }
   }
@@ -157,7 +136,6 @@ class LedController {
       await sendRequest(SetPowerRequest.on());
       return true;
     } catch (e) {
-      log.warning('error while powering on', e);
       return false;
     }
   }
@@ -171,7 +149,6 @@ class LedController {
       await sendRequest(SetPowerRequest.off());
       return true;
     } catch (e) {
-      log.warning('error while powering off', e);
       return false;
     }
   }
@@ -185,7 +162,6 @@ class LedController {
       final data = await sendRequest(StatusRequest());
       return StatusResponse(data);
     } catch (e) {
-      log.warning('error while requesting or receiving status', e);
       return null;
     }
   }
