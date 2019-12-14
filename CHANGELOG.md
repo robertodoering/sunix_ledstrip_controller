@@ -1,3 +1,8 @@
+## 1.0.2
+
+- Remove logging dependency
+- Cleanup dart docs
+
 ## 1.0.1
 
 - Update readme

@@ -2,23 +2,23 @@
 
 A dart library for controlling the Sunix® RGB / RGBWWCW WiFi LED strip controller.
 
-
 ## Features
+
 - Power the controller off and on
 - Change the color of the led controller
-	- For RGB or RGBWWCW (warm white and cold white) colors
+  - For RGB or RGBWWCW (warm white and cold white) colors
 - Receive the current status of the controller, including the power state and color values
 - Send multiple requests in quick succession
-	- Can be used to create a smooth transition from one color to another
-
+  - Can be used to create a smooth transition from one color to another
 
 ## Installation
+
 You can install the package by adding the following to your `pubspec.yaml`:
+
 ```yaml
 dependencies:
-  sunix_ledstrip_controller: ^1.0.1
+  sunix_ledstrip_controller: ^1.0.2
 ```
-
 
 ## Usage
 
@@ -58,4 +58,5 @@ main() async {
 See the `example` directory for a basic example.
 
 ## Attributions
+
 A big thanks goes to [@markusressel](https://github.com/markusressel) for his python library [sunix-ledstrip-controller-client](https://github.com/markusressel/sunix-ledstrip-controller-client).

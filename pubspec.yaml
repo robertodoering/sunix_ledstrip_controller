@@ -1,8 +1,7 @@
 name: sunix_ledstrip_controller
 description: A dart library for controlling the Sunix® RGB / RGBWWCW WiFi LED strip controller.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/robertodoering/sunix_ledstrip_controller
-author: Roberto Doering <rbydoering@gmail.com>
 
 environment:
   sdk: '>=2.0.0 <3.0.0'
